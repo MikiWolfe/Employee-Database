@@ -13,7 +13,7 @@ Repository name: Employee-Tracker
 * [Questions](#questions)
 
 ## Installation 
-```npm i on json files```
+```npm i on package.json files```
 ## Usage
 Assisting a company manage and organize their business 
 ## Licensing
@@ -49,3 +49,7 @@ Link to the repo: https://github.com/MikiWolfe/Employee-Tracker
 
 ### Image of application
 Link to a screenshot of the application: *LATER*
+
+### Link to Video Walkthrough
+Link to video walkthrough of application: *LATER*
+
