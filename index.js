@@ -1,3 +1,6 @@
+const mysql = require('mysql2');
+const db = require('./db/connection');
+const inquirer = require("inquirer");
 const cyan = "\x1b[36m";
 const magenta = "\x1b[35m";
 const green = "\x1b[32m";
@@ -21,9 +24,34 @@ const green = "\x1b[32m";
 
 // update an employee UPDATE
 
-const inquirer = require("inquirer");
+
+db.query('SELECT * FROM employess', (err, results) => {
+  console.table(results)
+})
+
+async function  viewEmployees() {
+  const employee = await db.query('SELECT * FROM employee') 
+console.table(employees)
+}
+
+async function addRole() {
+
+
+
+
+const department = await db.query()
+
+
+const choices = departments.map( department => {
+  return{
+    name: department.name,
+    value: departmentid
+  }
+})
+}
+
 function askFirstQuestion() {
-  console.log(cyan, "Welcome! What would you like to do?");
+  console.log(cyan, "Welcome! What would you like to do?"); 
   inquirer
     .prompt([
       {
