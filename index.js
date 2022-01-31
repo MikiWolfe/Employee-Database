@@ -1,6 +1,8 @@
 const mysql = require("mysql2");
 const db = require("./db/connection");
 const inquirer = require("inquirer");
+
+
 const Department = require("./lib/Department");
 const cyan = "\x1b[36m";
 const magenta = "\x1b[35m";
@@ -155,14 +157,14 @@ async function addRole() {
     return {
       id: role.id,
       title: role.title,
-      dept_id: role.dept_id,
+      department_id: role.department_id,
       salary: role.salary,
     };
   });
   const answers = await inquirer.prompt([
     {
       type: "list",
-      name: "dept_id",
+      name: "department_id",
       message: "Choose a department to add the role to:",
       choices: choices,
     },
@@ -172,7 +174,7 @@ async function addRole() {
   // [
   //  role.id,
   //  role.title,
-  //  role.dept_id,
+  //  role.department_id,
   //  role.salary
   // // ]
   // )
@@ -349,7 +351,7 @@ async function updateEmployee() {
 //     {
 //       type: "input",
 //       message: "Enter the department the department the role falls under",
-//       name: "department",
+//       name: "department_id",
 //       validate: async (input) => {
 //         if (input == ""|| (/[0-9]/g).test(input)) {
 //           return "Please enter a valid department";

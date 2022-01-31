@@ -5,14 +5,14 @@ USE employees_db;
 CREATE TABLE department(
     id INT NOT NULL PRIMARY KEY,
     name VARCHAR(30)
-);
+    );
 
 CREATE TABLE role(
     id INT NOT NULL PRIMARY KEY,
     title VARCHAR(30),
-    dept_id INT,
+    department_id INT,
     salary DECIMAL,
-    FOREIGN KEY (dept_id)
+    FOREIGN KEY (department_id)
     REFERENCES department(id)
     ON DELETE SET NULL
     );
