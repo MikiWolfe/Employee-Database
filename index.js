@@ -23,57 +23,13 @@ const green = "\x1b[32m";
 
 // update an employee UPDATE
 
-// view all departments
-db.query('SELECT * FROM department', (err, results) => {
-  console.table(results)
-  console.error(err)
-});
-
-// view all roles
-db.query('SELECT * FROM role', (err, results) => {
-  console.table(results)
-  console.error(err)
-});
-
-// view all employees
-db.query('SELECT * FROM employee', (err, results) => {
-  console.table(results)
-  console.error(err)
-});
-
-async function viewDepartments(){
-  const departments = await db.query('SELECT * FROM department')
-  console.table(departments)
-};
-
-async function viewRoles(){
-  const roles = await db.query('SELECT * FROM role')
-  console.table(roles)
-}
-
-async function  viewEmployees() {
-  const employees = await db.query('SELECT * FROM employee') 
-console.table(employees)
-};
-
-async function addRole() {
-
-  const department = await db.query('SELECT * FROM department')
-  const choices = departments.map( department => {
-    return{
-      name: department.name,
-      value: departmentid
-    }
-  })
-  }
-  
 function askFirstQuestion() {
   console.log(cyan, "Welcome! What would you like to do?"); 
   inquirer
     .prompt([
       {
         type: "list",
-        name: "firstInput",
+        name: "value",
         message: "What would you like to do?",
         choices: [
           "View all departments",
@@ -83,11 +39,81 @@ function askFirstQuestion() {
           "Add a role",
           "Add an employee",
           "Update an employee role",
+          "I would like to go home"
         ],
       },
     ])
-    // .then((respose) => )
+    .then((data) => {
+      statement = data.value;
+      switch(statement){
+        case  "View all departments":
+        viewDepartments()  
+        break;
+
+        case "View all roles":
+        viewRoles()
+        break;
+        
+        case "View all employees":
+        viewEmployees()
+        break;
+
+        case "Add a role":
+        addRole()
+        break;  
+      }
+    })
   }
+
+askFirstQuestion();
+
+async function viewDepartments(){
+  const departments = await db.query('SELECT * FROM department')
+  console.table(departments)
+  askFirstQuestion()
+};
+
+async function viewRoles(){
+  const roles = await db.query('SELECT * FROM role')
+  console.table(roles)
+  askFirstQuestion()
+}
+
+async function  viewEmployees() {
+  const employees = await db.query('SELECT * FROM employee') 
+console.table(employees)
+askFirstQuestion()
+};
+
+async function addDepartment(){
+
+}
+
+async function addRole() {
+
+  const departments = await db.query('SELECT * FROM department')
+  const choices = departments.map( department => {
+    return{
+      name: department.name,
+      value: department.id
+    }
+  })
+  const answers = await inquirer.prompt([
+    {
+      type: "list",
+      name: "dept_id",
+      message: "Choose a department to add the role to:",
+      choices: choices
+    }
+  ])
+  console.log(answers)
+  // INSERT function here --> ?
+
+  askFirstQuestion()
+}
+
+
+
 
 // adding the DEPARTMENT
  function addDepartment() {
@@ -108,46 +134,46 @@ function askFirstQuestion() {
 }
 
 // adding a ROLE
-async function addRole() {
-  inquirer.prompt([
-    {
-      type: "input",
-      message: "Enter the title of the role",
-      name: "title",
-      validate: async (input) => {
-        if (input == ""|| (/[0-9]/g).test(input)) {
-          return "Please enter a valid name";
-        }
-        return true;
-      },
-    },
-    {
-      type: "input",
-      message: "Enter the salary for the role",
-      name: "salary",
-      validate: async (input) => {
-        if (input == "" 
+// async function addRole() {
+//   inquirer.prompt([
+//     {
+//       type: "input",
+//       message: "Enter the title of the role",
+//       name: "title",
+//       validate: async (input) => {
+//         if (input == ""|| (/[0-9]/g).test(input)) {
+//           return "Please enter a valid name";
+//         }
+//         return true;
+//       },
+//     },
+//     {
+//       type: "input",
+//       message: "Enter the salary for the role",
+//       name: "salary",
+//       validate: async (input) => {
+//         if (input == "" 
         // || (/[0-9]/g).test(input)
-        )
-         {
-          return "Please enter a valid number";
-        }
-        return true;
-      },
-    },
-    {
-      type: "input",
-      message: "Enter the department the department the role falls under",
-      name: "department",
-      validate: async (input) => {
-        if (input == ""|| (/[0-9]/g).test(input)) {
-          return "Please enter a valid department";
-        }
-        return true;
-      },
-    },
-  ]);
-}
+//         )
+//          {
+//           return "Please enter a valid number";
+//         }
+//         return true;
+//       },
+//     },
+//     {
+//       type: "input",
+//       message: "Enter the department the department the role falls under",
+//       name: "department",
+//       validate: async (input) => {
+//         if (input == ""|| (/[0-9]/g).test(input)) {
+//           return "Please enter a valid department";
+//         }
+//         return true;
+//       },
+//     },
+//   ]);
+// }
 
 // // adding an EMPLOYEE
 async function addEmployee() {
@@ -242,6 +268,23 @@ async function updateEmployee() {
     ]);
   }
 
+  // view all departments
+// db.query('SELECT * FROM department', (err, results) => {
+//   console.table(results)
+//   console.error(err)
+// });
+
+// view all roles
+// db.query('SELECT * FROM role', (err, results) => {
+//   console.table(results)
+//   console.error(err)
+// });
+
+// view all employees
+// db.query('SELECT * FROM employee', (err, results) => {
+//   console.table(results)
+//   console.error(err)
+// });
 
 
 
