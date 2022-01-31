@@ -24,7 +24,7 @@ const green = "\x1b[32m";
 // update an employee UPDATE
 
 function askFirstQuestion() {
-  console.log(cyan, "Welcome! What would you like to do?");
+  console.log(cyan, "🚀 Hello! What would you like to do? 🚀");
   inquirer
     .prompt([
       {
@@ -135,27 +135,28 @@ async function addDepartment() {
       },
     ])
     .then((data) => {
-      let {id, name } = data;
+      let { id, name } = data;
       let department = new Department(id, name);
-   
-   
+      console.log(department);
     });
-    const insertResult = await db.query( 'INSERT INTO department (id, name) VALUES (?, ?)',
-    [
-      department.id,
-      department.name
-    ]
-    )
-    console.log(insertResult)
-    askFirstQuestion();
-};
+  // const insertResult = db.query( 'INSERT INTO department (id, name) VALUES (?, ?)'
+  // [
+  //   department.id,
+  //   department.name
+  // ]
+  // )
+
+  askFirstQuestion();
+}
 
 async function addRole() {
-  const departments = await db.query("SELECT * FROM department");
-  const choices = departments.map((department) => {
+  const roles = await db.query("SELECT * FROM role");
+  const choices = roles.map((role) => {
     return {
-      name: department.name,
-      value: department.id,
+      id: role.id,
+      title: role.title,
+      dept_id: role.dept_id,
+      salary: role.salary,
     };
   });
   const answers = await inquirer.prompt([
@@ -167,12 +168,155 @@ async function addRole() {
     },
   ]);
   console.log(answers);
-  // INSERT function here --> ?
+  // const insertResult = db.query( 'INSERT INTO roles (id, name, ) VALUES (?, ?, ?, ?)'
+  // [
+  //  role.id,
+  //  role.title,
+  //  role.dept_id,
+  //  role.salary
+  // // ]
+  // )
 
   askFirstQuestion();
 }
+async function addEmployee() {
+  const employees = await db.query("SELECT * FROM employee");
+  const choices = employees.map((employee) => {
+    return {
+      id: employee.id,
+      first_name: employee.first_name,
+      last_name: employee.last_name,
+      role_id: employee.role_id,
+      manager_id: employee.manager_id,
+    };
+  });
 
-// adding the DEPARTMENT
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "Enter the employee's id number",
+      name: "id",
+      validate: async (input) => {
+        if (input == "") {
+          return "Please enter a valid number";
+        }
+        return true;
+      },
+    },
+    {
+      type: "input",
+      message: "Enter the employee's first name",
+      name: "first_name",
+      validate: async (input) => {
+        if (input == "") {
+          return "Please enter a valid name";
+        }
+        return true;
+      },
+    },
+    {
+      type: "input",
+      message: "Enter the employee's last name",
+      name: "last_name",
+      validate: async (input) => {
+        if (input == "") {
+          return "Please enter a valid name";
+        }
+        return true;
+      },
+    },
+    {
+      type: "input",
+      message: "Enter the employee's role",
+      name: "role_id",
+      validate: async (input) => {
+        if (input == "" || /[0-9]/g.test(input)) {
+          return "Please enter a valid role";
+        }
+        return true;
+      },
+    },
+    {
+      type: "input",
+      message: "Enter their manager's ID",
+      name: "mmanager_id",
+    },
+  ]);
+}
+
+// updating an EMPOLYEE
+async function updateEmployee() {
+  const answers = await db
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "Enter the employee's id number",
+      name: "id",
+      validate: async (input) => {
+        if (input == "") {
+          return "Please enter a valid number";
+        }
+        return true;
+      },
+    },
+    {
+      type: "input",
+      message: "Enter the employee's first name",
+      name: "first_name",
+      validate: async (input) => {
+        if (input == "") {
+          return "Please enter a valid name";
+        }
+        return true;
+      },
+    },
+    {
+      type: "input",
+      message: "Enter the employee's last name",
+      name: "last_name",
+      validate: async (input) => {
+        if (input == "") {
+          return "Please enter a valid name";
+        }
+        return true;
+      },
+    },
+    {
+      type: "input",
+      message: "Enter the employee's role",
+      name: "role_id",
+      validate: async (input) => {
+        if (input == "" || /[0-9]/g.test(input)) {
+          return "Please enter a valid role";
+        }
+        return true;
+      },
+    },
+    {
+      type: "input",
+      message: "Enter the employee's manager",
+      name: "mmanager_id",
+    },
+  ]);
+}
+
+// view all departments
+// db.query('SELECT * FROM department', (err, results) => {
+//   console.table(results)
+//   console.error(err)
+// });
+
+// view all roles
+// db.query('SELECT * FROM role', (err, results) => {
+//   console.table(results)
+//   console.error(err)
+// });
+
+// view all employees
+// db.query('SELECT * FROM employee', (err, results) => {
+//   console.table(results)
+//   console.error(err)
+// });
 
 // adding a ROLE
 // async function addRole() {
@@ -215,114 +359,3 @@ async function addRole() {
 //     },
 //   ]);
 // }
-
-// // adding an EMPLOYEE
-async function addEmployee() {
-  inquirer.prompt([
-    {
-      type: "input",
-      message: "Enter the employee's first name",
-      name: "firstName",
-      validate: async (input) => {
-        if (input == "") {
-          return "Please enter a valid name";
-        }
-        return true;
-      },
-    },
-    {
-      type: "input",
-      message: "Enter the employee's last name",
-      name: "lastName",
-      validate: async (input) => {
-        if (input == "") {
-          return "Please enter a valid name";
-        }
-        return true;
-      },
-    },
-    {
-      type: "input",
-      message: "Enter the employee's role",
-      name: "role",
-      validate: async (input) => {
-        if (input == "" || /[0-9]/g.test(input)) {
-          return "Please enter a valid role";
-        }
-        return true;
-      },
-    },
-    {
-      type: "input",
-      message: "Enter the employee's manager",
-      name: "managerName",
-    },
-  ]);
-}
-// updating an EMPOLYEE
-async function updateEmployee() {
-  inquirer.prompt([
-    {
-      type: "input",
-      message: "Enter the employee's first name",
-      name: "firstName",
-      validate: async (input) => {
-        if (input == "") {
-          return "Please enter a valid name";
-        }
-        return true;
-      },
-    },
-    {
-      type: "input",
-      message: "Enter the employee's last name",
-      name: "lastName",
-      validate: async (input) => {
-        if (input == "") {
-          return "Please enter a valid name";
-        }
-        return true;
-      },
-    },
-    {
-      type: "input",
-      message: "Enter the employee's role",
-      name: "role",
-      validate: async (input) => {
-        if (input == "" || /[0-9]/g.test(input)) {
-          return "Please enter a valid role";
-        }
-        return true;
-      },
-    },
-    {
-      type: "input",
-      message: "Enter the employee's manager",
-      name: "manager",
-      validate: async (input) => {
-        if (input == "") {
-          return "Please enter a valid name";
-        }
-        return true;
-      },
-    },
-  ]);
-}
-
-// view all departments
-// db.query('SELECT * FROM department', (err, results) => {
-//   console.table(results)
-//   console.error(err)
-// });
-
-// view all roles
-// db.query('SELECT * FROM role', (err, results) => {
-//   console.table(results)
-//   console.error(err)
-// });
-
-// view all employees
-// db.query('SELECT * FROM employee', (err, results) => {
-//   console.table(results)
-//   console.error(err)
-// });
