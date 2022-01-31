@@ -5,7 +5,6 @@ const cyan = "\x1b[36m";
 const magenta = "\x1b[35m";
 const green = "\x1b[32m";
 
-// view all departments READ - "SELECT * FROM [table_name]"
 
 // view all employees READ - "SELECT * FROM [table_name]" <-- JOIN
 
@@ -25,20 +24,29 @@ const green = "\x1b[32m";
 // update an employee UPDATE
 
 
-db.query('SELECT * FROM employess', (err, results) => {
+db.query('SELECT * FROM employee', (err, results) => {
+  console.error(err)
   console.table(results)
-})
+});
+
+async function viewDepartments(){
+  const departments = await db.query('SELECT * FROM department')
+  console.table(departments)
+};
+
+async function viewRoles(){
+  const roles = await db.query('SELECT * FROM role')
+  console.table(roles)
+}
 
 async function  viewEmployees() {
-  const employee = await db.query('SELECT * FROM employee') 
+  const employees = await db.query('SELECT * FROM employee') 
 console.table(employees)
-}
+};
 
 async function addRole() {
 
 const department = await db.query()
-
-
 const choices = departments.map( department => {
   return{
     name: department.name,
@@ -66,6 +74,8 @@ function askFirstQuestion() {
         ],
       },
     ])
+    .then((respose) => {})
+  }
 
 // adding the DEPARTMENT
  function addDepartment() {
@@ -219,9 +229,7 @@ async function updateEmployee() {
       },
     ]);
   }
-}
 
-askFirstQuestion();
 
-// module.exports = 
+
 

@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
   host: "localhost",  
   user: "root",
   password: "pass",
-  database: "employees"
+  database: "employees_db"
 });
 
 connection.query = util.promisify( connection.query );
@@ -17,3 +17,5 @@ connection.connect(function (err) {
 });
 
 module.exports = connection;
+
+
