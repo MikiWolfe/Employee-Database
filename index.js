@@ -23,10 +23,22 @@ const green = "\x1b[32m";
 
 // update an employee UPDATE
 
-
-db.query('SELECT * FROM employee', (err, results) => {
-  console.error(err)
+// view all departments
+db.query('SELECT * FROM department', (err, results) => {
   console.table(results)
+  console.error(err)
+});
+
+// view all roles
+db.query('SELECT * FROM role', (err, results) => {
+  console.table(results)
+  console.error(err)
+});
+
+// view all employees
+db.query('SELECT * FROM employee', (err, results) => {
+  console.table(results)
+  console.error(err)
 });
 
 async function viewDepartments(){
@@ -46,15 +58,15 @@ console.table(employees)
 
 async function addRole() {
 
-const department = await db.query()
-const choices = departments.map( department => {
-  return{
-    name: department.name,
-    value: departmentid
+  const department = await db.query('SELECT * FROM department')
+  const choices = departments.map( department => {
+    return{
+      name: department.name,
+      value: departmentid
+    }
+  })
   }
-})
-}
-
+  
 function askFirstQuestion() {
   console.log(cyan, "Welcome! What would you like to do?"); 
   inquirer
@@ -74,7 +86,7 @@ function askFirstQuestion() {
         ],
       },
     ])
-    .then((respose) => {})
+    // .then((respose) => )
   }
 
 // adding the DEPARTMENT
@@ -125,7 +137,7 @@ async function addRole() {
     },
     {
       type: "input",
-      message: "Enter the department falls under",
+      message: "Enter the department the department the role falls under",
       name: "department",
       validate: async (input) => {
         if (input == ""|| (/[0-9]/g).test(input)) {
