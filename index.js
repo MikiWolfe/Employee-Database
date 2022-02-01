@@ -138,8 +138,7 @@ async function addDepartment() {
     ])
     .then((data) => {
       let { id, name } = data;
-      let department = new Department(id, name);
-      console.log(department);
+      console.log(data);
     });
   // const insertResult = db.query( 'INSERT INTO department (id, name) VALUES (?, ?)'
   // [
