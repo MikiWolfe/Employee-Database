@@ -1,9 +1,6 @@
 const mysql = require("mysql2");
 const db = require("./db/connection");
 const inquirer = require("inquirer");
-
-
-const Department = require("./lib/Department");
 const cyan = "\x1b[36m";
 const magenta = "\x1b[35m";
 const green = "\x1b[32m";
@@ -245,8 +242,35 @@ async function addEmployee() {
   ]);
 }
 
-// updating an EMPOLYEE
+// updating an EMPOLYEE TODO: fix this:
 async function updateEmployee() {
+  const employees = await db.query("SELECT * FROM employee");
+  const choices = employees.map((employee) => {
+    return {
+      id: employee.id,
+      first_name: employee.first_name,
+      last_name: employee.last_name,
+      role_id: employee.role_id,
+      manager_id: employee.manager_id,
+    };
+  });
+  const answers = await inquirer.prompt([
+    {
+      type: "list",
+      name: "employee.id",
+      message: "Choose an employee's ID that you would like to update:",
+      choices: choices,
+    },
+  ]);
+  console.log(answers);
+ // const insertResult = db.query( 'INSERT INTO roles (id, name, ) VALUES (?, ?, ?, ?)'
+  // [
+  //  role.id,
+  //  role.title,
+  //  role.department_id,
+  //  role.salary
+  // // ]
+  // )
   const answers = await db
   inquirer.prompt([
     {
