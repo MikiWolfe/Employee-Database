@@ -14,18 +14,18 @@ VALUES("Captain", 250000, 1),
   ("Assistant chief engineer", 120000, 2),
   ("Chief science officer", 160000, 3),
   ("Science officer", 125000, 3),
-  ("Chief operations officer", 150000, 4),
+  ("Chief operations officer", 175000, 4),
   ("Communications Officer", 190000, 5);
 
 INSERT INTO
   employee (first_name, last_name, role_id, manager_id)
  VALUES("Jean-Luc", "Picard", 1, NULL),
-  ("Montgomery", "Scott", 1, 1),
-  ("Geordi", "La Forge", 2, NULL),
-  ("B'Elanna", "Torres", 2, 3),
-  ("S'chn T'gai", "Spock",  3, NULL),
-  ("Jadzia", "Dax", 3, 5),
-  ("Data", "", 4, NULL),
-  ("Nyota", "Uhura", 5, NULL);
+  ("Montgomery", "Scott", 2, 1),
+  ("Geordi", "La Forge", 3, NULL),
+  ("B'Elanna", "Torres", 4, 3),
+  ("S'chn T'gai", "Spock",  5, NULL),
+  ("Jadzia", "Dax", 6, 5),
+  ("Data", "", 7, NULL),
+  ("Nyota", "Uhura", 8, NULL);
 
 

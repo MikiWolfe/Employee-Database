@@ -64,25 +64,26 @@ function askFirstQuestion() {
 askFirstQuestion();
 
 async function viewDepartments() {
-  const departments = await db.query("SELECT * FROM department");
-  console.table(departments);
+  const department = await db.query("SELECT * FROM department");
+  console.table(department);
   askFirstQuestion();
 }
 
 async function viewRoles() {
-  const roles = await db.query("SELECT * FROM role");
-  console.table(roles);
+  const role = await db.query("SELECT * FROM role");
+  console.table(role);
   askFirstQuestion();
 }
 
 async function viewEmployees() {
-  const employees = await db.query("SELECT * FROM employee");
-  console.table(employees);
+  // Joined the  role and employees tables 
+  const employee = await db.query("SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id");
+  console.table(employee);
   askFirstQuestion();
 }
 
 async function addDepartment() {
-  const answersDepartment = await
+  const departmentAnswers = await
   inquirer
     .prompt([
       {
@@ -104,44 +105,63 @@ async function addDepartment() {
 }
 
 async function addRole() {
+  
+  const department = await db.query("SELECT * FROM department");
+  const roleChoices = department.map((department) => {
+    return {
+        value : department.id,
+        name : department.name
+    };
+  });
+
+  const answersRole = await inquirer.prompt([
+    {
+      type: "list",
+      name: "department_id",
+      message: "Choose a department:",
+      choices: roleChoices,
+    },
+    {
+            type: "input",
+            message: "Enter the title of the role",
+            name: "title",
+          },
+          {
+            type: "input",
+            message: "Enter the salary for the role",
+            name: "salary",
+          }
+  ])
+
+  .then(async function(data) {
+    let {department_id, title, salary} = data
+    console.log(data);
+    const roleQuery = await db.query('INSERT INTO role SET ?', {
+    department_id: data.department_id,
+     title: data.title,
+     salary: data.salary
+    })  
+  })
+
+  askFirstQuestion();
+}
+async function addEmployee() {
   const roles = await db.query("SELECT * FROM department");
   const choices = roles.map((role) => {
     return {
-     id: role.id,
-     title: role.title,
-     salary: role.salary,
-     department_id: role.department_id
+        value : role.id,
+        name : role.name
     };
   });
   const answersRole = await inquirer.prompt([
     {
       type: "list",
-      name: "department_id",
-      message: "Choose a department to add the role to:",
+      name: "role_id",
+      message: "Choose a role:",
       choices: choices,
     },
   ])
-  .then(async function(data) {
-    console.log(data);
-     let roleName = data.name
-     let salary = data.salary
-    const roleQuery = await db.query('INSERT INTO role SET ?', {
-     title: roleName,
-     salary: salary
-    })  
-  })
-  // const insertResult = db.query( 'INSERT INTO roles (id, name, ) VALUES (?, ?, ?, ?)'
-  // [
-  //  role.id,
-  //  role.title,
-  //  role.department_id,
-  //  role.salary
-  // // ]
-  // )
 
-  askFirstQuestion();
-}
-async function addEmployee() {
   const employeesAnswers = await 
    inquirer
    .prompt([
@@ -170,16 +190,12 @@ async function addEmployee() {
     },
   ])
   .then(async function(data) {
-    console.log(data);
-     let firstName = data.first_name
-     let lastName = data.last_name
-     let roleID = data.role_id
-     let managerID = data.manager_id
+    let {first_name, last_name, role_id, manager_id} = data
     const employeeQuery = await db.query('INSERT INTO employee SET ?', {
-    first_name : firstName,
-    last_name : lastName,
-    role_id : roleID,
-    manager_id : managerID
+    first_name : data.first_name,
+    last_name : data.last_name,
+    role_id : data.role_id,
+    manager_id : data.manager_id
     })  
   })
   askFirstQuestion()
@@ -206,7 +222,7 @@ async function updateEmployee() {
     },
   ]);
   console.log(responce);
- // const insertResult = db.query( 'INSERT INTO roles (id, name, ) VALUES (?, ?, ?, ?)'
+ // const insertResult = db.query( 'UPDATE INTO employees (id, name, ) VALUES (?, ?, ?, ?)'
   // [
   //  role.id,
   //  role.title,
@@ -268,62 +284,9 @@ async function updateEmployee() {
   ]);
 }
 
-// view all departments
-// db.query('SELECT * FROM department', (err, results) => {
-//   console.table(results)
-//   console.error(err)
-// });
 
-// view all roles
-// db.query('SELECT * FROM role', (err, results) => {
-//   console.table(results)
-//   console.error(err)
-// });
 
-// view all employees
-// db.query('SELECT * FROM employee', (err, results) => {
-//   console.table(results)
-//   console.error(err)
-// });
 
-// adding a ROLE
-// async function addRole() {
-//   inquirer.prompt([
-//     {
-//       type: "input",
-//       message: "Enter the title of the role",
-//       name: "title",
-//       validate: async (input) => {
-//         if (input == ""|| (/[0-9]/g).test(input)) {
-//           return "Please enter a valid name";
-//         }
-//         return true;
-//       },
-//     },
-//     {
-//       type: "input",
-//       message: "Enter the salary for the role",
-//       name: "salary",
-//       validate: async (input) => {
-//         if (input == ""
-// || (/[0-9]/g).test(input)
-//         )
-//          {
-//           return "Please enter a valid number";
-//         }
-//         return true;
-//       },
-//     },
-//     {
-//       type: "input",
-//       message: "Enter the department the department the role falls under",
-//       name: "department_id",
-//       validate: async (input) => {
-//         if (input == ""|| (/[0-9]/g).test(input)) {
-//           return "Please enter a valid department";
-//         }
-//         return true;
-//       },
-//     },
-//   ]);
-// }
+
+
+
