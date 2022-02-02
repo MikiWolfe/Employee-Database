@@ -106,8 +106,8 @@ async function addDepartment() {
 
 async function addRole() {
   
-  const department = await db.query("SELECT * FROM department");
-  const roleChoices = department.map((department) => {
+  const departments = await db.query("SELECT * FROM department");
+  const departmentChoices = departments.map((department) => {
     return {
         value : department.id,
         name : department.name
@@ -119,7 +119,7 @@ async function addRole() {
       type: "list",
       name: "department_id",
       message: "Choose a department:",
-      choices: roleChoices,
+      choices: departmentChoices,
     },
     {
             type: "input",
@@ -146,26 +146,21 @@ async function addRole() {
   askFirstQuestion();
 }
 async function addEmployee() {
-  const roles = await db.query("SELECT * FROM department");
-  const choices = roles.map((role) => {
+  const roles = await db.query("SELECT * FROM role");
+  const roleCoices = roles.map((role) => {
     return {
-        value : role.id,
-        name : role.name
+      name : role.title,
+      value : role.id
     };
   });
   const answersRole = await inquirer.prompt([
     {
       type: "list",
-      name: "role_id",
+      name: "title",
       message: "Choose a role:",
-      choices: choices,
+      choices: roleCoices,
     },
-  ])
-
-  const employeesAnswers = await 
-   inquirer
-   .prompt([
-    {
+        {
       type: "input",
       message: "Enter the employee's first name",
       name: "first_name",
@@ -179,22 +174,17 @@ async function addEmployee() {
     },
     {
       type: "input",
-      message: "Enter the employee's role ID",
-      name: "role_id",
-     
-    },
-    {
-      type: "input",
       message: "Enter their manager's ID",
       name: "mmanager_id",
     },
   ])
   .then(async function(data) {
-    let {first_name, last_name, role_id, manager_id} = data
+    console.log(data)
+    let {first_name, last_name, title, manager_id} = data
     const employeeQuery = await db.query('INSERT INTO employee SET ?', {
     first_name : data.first_name,
     last_name : data.last_name,
-    role_id : data.role_id,
+    role_id : data.title,
     manager_id : data.manager_id
     })  
   })
