@@ -20,7 +20,7 @@ function askFirstQuestion() {
           "Add a department",
           "Add a role",
           "Add an employee",
-          "Update an employee role",
+          "Update an employee",
           "I would like to go home",
         ],
       },
@@ -70,7 +70,8 @@ async function viewDepartments() {
 }
 
 async function viewRoles() {
-  const role = await db.query("SELECT * FROM role");
+  // const role = await db.query("SELECT * FROM role")
+  const role = await db.query("SELECT role.*, department.name, department.id FROM role LEFT JOIN department ON role.department_id = department.id");
   console.table(role);
   askFirstQuestion();
 }
@@ -94,8 +95,7 @@ async function addDepartment() {
       },
     ])
     .then(async function(data) {
-      console.log(data);
-       let departmentName = data.name
+      let departmentName = data.name
       const departmentQuery = await db.query('INSERT INTO department SET ?', {
        name: departmentName
       })  
@@ -135,16 +135,16 @@ async function addRole() {
 
   .then(async function(data) {
     let {department_id, title, salary} = data
-    console.log(data);
     const roleQuery = await db.query('INSERT INTO role SET ?', {
     department_id: data.department_id,
-     title: data.title,
-     salary: data.salary
+    title: data.title,
+    salary: data.salary
     })  
   })
 
   askFirstQuestion();
 }
+
 async function addEmployee() {
   const roles = await db.query("SELECT * FROM role");
   const roleCoices = roles.map((role) => {
@@ -175,7 +175,7 @@ async function addEmployee() {
     {
       type: "input",
       message: "Enter their manager's ID",
-      name: "mmanager_id",
+      name: "manager_id",
     },
   ])
   .then(async function(data) {
@@ -193,90 +193,75 @@ async function addEmployee() {
 
 // updating an EMPOLYEE TODO: fix this:
 async function updateEmployee() {
-  const employees = await db.query("SELECT * FROM employee");
-  const choices = employees.map((employee) => {
+  
+  const employeeUpdate = await db.query("SELECT * FROM employee");
+  const employeeChoices = employeeUpdate.map((employee) => {
     return {
-      id: employee.id,
-      first_name: employee.first_name,
-      last_name: employee.last_name,
-      role_id: employee.role_id,
-      manager_id: employee.manager_id,
+      name : employee.id,
+      value: employee.id
     };
+   });
+  const roleUpdate = await db.query("SELECT * FROM role");
+  const roleChoiceUpdate = roleUpdate.map((role) => {
+    return { 
+      name : role.title,
+      value : role.id
+    }
   });
+  const managerUpdate = await db.query("SELECT * FROM employee");
+  const managerChoices = managerUpdate.map((manager) => {
+    return {
+      name : manager.manager_id,
+      value: manager.id
+    };
+   });
   const responce = await inquirer.prompt([
     {
       type: "list",
-      name: "employee.id",
-      message: "Choose an employee's ID that you would like to update:",
-      choices: choices,
-    },
-  ]);
-  console.log(responce);
- // const insertResult = db.query( 'UPDATE INTO employees (id, name, ) VALUES (?, ?, ?, ?)'
-  // [
-  //  role.id,
-  //  role.title,
-  //  role.department_id,
-  //  role.salary
-  // // ]
-  // )
-  const respo = await db
-  inquirer.prompt([
-    {
-      type: "input",
-      message: "Enter the employee's id number",
       name: "id",
-      validate: async (input) => {
-        if (input == "") {
-          return "Please enter a valid number";
-        }
-        return true;
-      },
+      message: "Choose an employee's ID that you would like to update:",
+      choices: employeeChoices,
+    },
+    {
+      type: "list",
+      name: "role_id",
+      message: "Choose a role for the employee",
+      choices: roleChoiceUpdate,
     },
     {
       type: "input",
       message: "Enter the employee's first name",
       name: "first_name",
-      validate: async (input) => {
-        if (input == "") {
-          return "Please enter a valid name";
-        }
-        return true;
-      },
     },
     {
       type: "input",
       message: "Enter the employee's last name",
-      name: "last_name",
-      validate: async (input) => {
-        if (input == "") {
-          return "Please enter a valid name";
-        }
-        return true;
-      },
+      name: "last_name"
     },
     {
-      type: "input",
-      message: "Enter the employee's role",
-      name: "role_id",
-      validate: async (input) => {
-        if (input == "" || /[0-9]/g.test(input)) {
-          return "Please enter a valid role";
-        }
-        return true;
-      },
+      type: "list",
+      name: "manager_id",
+      message: "Select from manager IDs",
+      choices: managerChoices
     },
-    {
-      type: "input",
-      message: "Enter the employee's manager",
-      name: "mmanager_id",
-    },
-  ]);
+  ])
+  // const insertResult = db.query( 'UPDATE INTO employees (id, name, ) VALUES (?, ?, ?, ?)'
+  .then(async function(data) {
+  console.log(data)
+  let {id, first_name, last_name, role_id, manager_id} = data
+  // const employeeQuery = await db.query('UPDATE employee SET id, first_name, last_name, role_id, manager_id WHERE id, first_name, last_name, role_id, manager_id = ?,?, ?, ?, ?', {
+  id: data.id,  
+  first_name : data.first_name, 
+  last_name : data.last_name,
+  role_id : data.role_id,
+  manager_id : data.manager_id
+  })  
+})
+console.table(data)
+askFirstQuestion()
 }
 
-
-
-
+// DELETE FROM employee WHERE id = 2;
 
 
 

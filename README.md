@@ -41,10 +41,7 @@ None
 ## Questions
 Please reach out if you have any questions about this application:
 GitHub profile: https://github.com/MikiWolfe
-Please contact:  with any questions. 
 
-### Link to Deployed Site
-Link to the deployed site: *LATER*
 Link to the repo: https://github.com/MikiWolfe/Employee-Tracker
 
 ### Image of application
