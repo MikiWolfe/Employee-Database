@@ -5,7 +5,7 @@ const cyan = "\x1b[36m";
 // const magenta = "\x1b[35m";
 // const green = "\x1b[32m";
 
-function askFirstQuestion() {
+function mainMenu() {
   console.log(cyan, "🚀 Hello! What would you like to do? 🚀");
   inquirer
     .prompt([
@@ -61,26 +61,26 @@ function askFirstQuestion() {
       }
     });
 }
-askFirstQuestion();
+mainMenu();
 
 async function viewDepartments() {
   const department = await db.query("SELECT * FROM department");
   console.table(department);
-  askFirstQuestion();
+  mainMenu();
 }
 
 async function viewRoles() {
   // const role = await db.query("SELECT * FROM role")
   const role = await db.query("SELECT role.*, department.name, department.id FROM role LEFT JOIN department ON role.department_id = department.id");
   console.table(role);
-  askFirstQuestion();
+  mainMenu();
 }
 
 async function viewEmployees() {
   // Joined the  role and employees tables 
   const employee = await db.query("SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id");
   console.table(employee);
-  askFirstQuestion();
+  mainMenu();
 }
 
 async function addDepartment() {
@@ -101,7 +101,7 @@ async function addDepartment() {
       })  
     })
 
-  askFirstQuestion();
+  mainMenu();
 }
 
 async function addRole() {
@@ -142,7 +142,7 @@ async function addRole() {
     })  
   })
 
-  askFirstQuestion();
+  mainMenu();
 }
 
 async function addEmployee() {
@@ -153,6 +153,13 @@ async function addEmployee() {
       value : role.id
     };
   });
+  const managerAdd = await db.query("SELECT * FROM employee");
+  const addManager = managerAdd.map((manager) => {
+    return {
+      name : manager.last_name,
+      value: manager.id
+    };
+   });
   const answersRole = await inquirer.prompt([
     {
       type: "list",
@@ -162,24 +169,25 @@ async function addEmployee() {
     },
         {
       type: "input",
-      message: "Enter the employee's first name",
+      message: "Enter the employee's first name:",
       name: "first_name",
       
     },
     {
       type: "input",
-      message: "Enter the employee's last name",
+      message: "Enter the employee's last name:",
       name: "last_name",
      
     },
     {
-      type: "input",
-      message: "Enter their manager's ID",
+      type: "list",
+      message: "Who is their manager:",
       name: "manager_id",
-    },
+      choices: addManager
+    }
+    
   ])
   .then(async function(data) {
-    console.log(data)
     let {first_name, last_name, title, manager_id} = data
     const employeeQuery = await db.query('INSERT INTO employee SET ?', {
     first_name : data.first_name,
@@ -188,7 +196,7 @@ async function addEmployee() {
     manager_id : data.manager_id
     })  
   })
-  askFirstQuestion()
+  mainMenu()
 }
 
 // updating an EMPOLYEE TODO: fix this:
@@ -211,7 +219,7 @@ async function updateEmployee() {
   const managerUpdate = await db.query("SELECT * FROM employee");
   const managerChoices = managerUpdate.map((manager) => {
     return {
-      name : manager.manager_id,
+      name : manager.last_name,
       value: manager.id
     };
    });
@@ -225,43 +233,42 @@ async function updateEmployee() {
     {
       type: "list",
       name: "role_id",
-      message: "Choose a role for the employee",
+      message: "Choose a role for the employee:",
       choices: roleChoiceUpdate,
     },
     {
       type: "input",
-      message: "Enter the employee's first name",
+      message: "Enter the employee's first name:",
       name: "first_name",
     },
     {
       type: "input",
-      message: "Enter the employee's last name",
+      message: "Enter the employee's last name:",
       name: "last_name"
     },
     {
       type: "list",
+      message: "Select from manager names:",
       name: "manager_id",
-      message: "Select from manager IDs",
       choices: managerChoices
     },
   ])
   // const insertResult = db.query( 'UPDATE INTO employees (id, name, ) VALUES (?, ?, ?, ?)'
   .then(async function(data) {
   console.log(data)
-  let {id, first_name, last_name, role_id, manager_id} = data
-  // const employeeQuery = await db.query('UPDATE employee SET id, first_name, last_name, role_id, manager_id WHERE id, first_name, last_name, role_id, manager_id = ?,?, ?, ?, ?', {
-  id: data.id,  
-  first_name : data.first_name, 
+  let { first_name, last_name, role_id, manager_id} = data
+  const employeeQuery = await db.query('UPDATE employee SET WHERE ?', {
+    first_name : data.first_name, 
   last_name : data.last_name,
   role_id : data.role_id,
   manager_id : data.manager_id
   })  
 })
-console.table(data)
-askFirstQuestion()
+mainMenu()
 }
+// DELETE Roles and Departments
 
-// DELETE FROM employee WHERE id = 2;
+// DELETE FROM employee WHERE ?;
 
 
-
+// 'SELECT title FROM role' to select all employees by role 
