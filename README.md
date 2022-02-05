@@ -15,7 +15,7 @@ Repository name: Employee-Database.
 ## Installation 
 ```npm i on package.json files```
 ## Usage
-Assisting a company manage and organize their employees, roles and departments.  Departments, roles and employees can be added and removed.  Each department, role and employee are issued their own ID.  Tables of departments, roles and employees can be displayed, with columns including salaries and job titles.  Employees can also be reassigned managers and roles in the database. Updates in the future will allow users to display tables by budget so they can plan their financial future accordingly.  
+Assisting a company manage and organize their employees, roles and departments.  Departments, roles and employees can be added and removed.  Each department, role and employee are issued their own ID automatically.  Tables of departments, roles and employees can be displayed, with columns including salaries and job titles. Updates in the future will allow users to display tables by budget so they can plan their financial future accordingly. As well as updating employee information. 
 ## Licensing
 2023 Mikayla B. 
 Copyright Permission is hereby granted, free of charge, 
