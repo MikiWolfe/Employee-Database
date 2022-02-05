@@ -2,8 +2,6 @@ const mysql = require("mysql2");
 const db = require("./db/connection");
 const inquirer = require("inquirer");
 const cyan = "\x1b[36m";
-// const magenta = "\x1b[35m";
-// const green = "\x1b[32m";
 
 function mainMenu() {
   console.log(cyan, "🚀 Hello! What would you like to do? 🚀");
@@ -23,8 +21,8 @@ function mainMenu() {
           "Update an employee's manager",
           "Remove an employee",
           "Remove a department",
-         "Remove a role",
-         "View employees by department",
+          "Remove a role",
+          "View employees by department",
           "I would like to go home",
         ],
       },
@@ -255,11 +253,12 @@ async function updateEmployeeManager() {
     ])
     .then(async function (data) {
       console.log(data);
-      let { manager_id } = data;
+      let {manager_id } = data;
       const employeeUpdateQuery = await db.query(
         "UPDATE employee SET WHERE ?",
         {
-          manager_id: data.manager_id,
+         
+          manager_id: data.manager_id
         }
       );
     });
@@ -294,24 +293,68 @@ async function removeEmployee() {
       );
     });
   mainMenu();
-};
+}
 
 async function removeRole() {
-const roleDelete = await db.query('SELECT * FROM role');
-const roleDeleteChoices = roleDelete.map((roles) => {
-  return {
-    name: role.name,
-    value: role.role_id
-  }
-})
-const deleteRole = await inquirer
-.prompt([
-  {
-    type : "list",
-  name:"role",
+  const roleDelete = await db.query(
+    "SELECT * FROM role"
+  );
+  const roleDeleteChoices = roleDelete.map((role) => {
+    return {
+      name: role.title,
+      value: role.id,
+    };
+  });
+  const deleteRole = await inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "id",
+        message: "Choose a role to remove:",
+        choices: roleDeleteChoices,
+      },
+    ])
+    .then(async function (data) {
+      console.log(data);
+      let { id } = data;
+      const roleDeleteQuery = await db.query("DELETE FROM role WHERE ?", {
+        id: data.id,
+      });
+    });
+  mainMenu();
 }
-])
 
+async function removeDept() {
+  const departmentDelete = await db.query("SELECT * FROM department");
+  const departmentDeleteChoices = departmentDelete.map((departments) => {
+    return {
+      name: departments.name,
+      value: departments.id,
+    };
+  });
+  const deleteDept = await inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "department",
+        message: "Which department do you want to remove?",
+        choices: departmentDeleteChoices,
+      },
+    ])
+    .then(async function (data) {
+      console.log(data);
+      let { name } = data;
+      const departmentDeleteQuery = await db.query(
+        "DELETE FROM department WHERE ?",
+        {
+          name: data.name,
+        }
+      );
+    });
+  mainMenu();
+}
+
+async function employeesAndDept(){
 
 
 
@@ -319,37 +362,7 @@ const deleteRole = await inquirer
 }
 
 
-async function removeDept() {
-const departmentDelete = await db.query('SELECT * FROM department');
-const departmentDeleteChoices = departmentDelete.map((departments) => {
-  return {
-    name : departments.name,
-  value : departments.id }
-})
-const deleteDept = await inquirer
-.prompt([
-  {
-    type: "list",
-    name: "department",
-    message: "Which department do you want to remove?",
-    choices: departmentDeleteChoices
-  }
-])
-  .then(async function (data){
-    console.log(data)
-    let {id, name } = data;
-    const departmentDeleteQuery = await db.query("DELETE FROM department WHERE ?",
-    {
-      id: data.id,
-      name: data.name
-    })
-})
-mainMenu()
-};
 
 
-// DELETE Roles and Departments
-
-// DELETE FROM employee WHERE ?;
 
 // 'SELECT title FROM role' to select all employees by role
