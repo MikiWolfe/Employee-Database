@@ -227,18 +227,18 @@ async function removeDept() {
     .prompt([
       {
         type: "list",
-        name: "department",
+        name: "id",
         message: "Which department do you want to remove?",
         choices: departmentDeleteChoices,
       },
     ])
     .then(async function (data) {
       console.log(data);
-      let { name } = data;
+      let { id } = data;
       const departmentDeleteQuery = await db.query(
         "DELETE FROM department WHERE ?",
         {
-          name: data.name,
+          id: data.id,
         }
       );
     });
