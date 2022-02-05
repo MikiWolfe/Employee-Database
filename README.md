@@ -45,7 +45,7 @@ GitHub profile: https://github.com/MikiWolfe
 Link to the repo: https://github.com/MikiWolfe/Employee-Database
 
 ### Image of application
-Link to a screenshot of the application: *LATER*
+Link to a screenshot of the application: https://raw.githubusercontent.com/MikiWolfe/Employee-Database/main/Screenshot.png
 
 ### Link to Video Walkthrough
 Link to video walkthrough of application: *LATER*
