@@ -83,6 +83,7 @@ async function viewDepartments() {
 }
 
 async function viewRoles() {
+  // Joined the role and department tables
   const role = await db.query(
     "SELECT role.*, department.name, department.id FROM role LEFT JOIN department ON role.department_id = department.id"
   );
