@@ -21,7 +21,7 @@ function mainMenu() {
           "Remove a department",
           "Remove a role",
           "Remove an employee",
-          "Update an employee",
+          // "Update an employee",
           "I would like to go home",
         ],
       },
@@ -128,7 +128,6 @@ async function addRole() {
       value: department.id,
       name: department.name,
     };
-
   });
 
   const answersRole = await inquirer
@@ -302,29 +301,35 @@ async function removeEmployee() {
   mainMenu();
 }
 
-
+// Tried and failed to get this function to work 
 async function updateEmployee() {
-  const employeeUpdate = await db.query("SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id");
+  const employeeUpdate = await db.query(
+    "SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id"
+  );
   const employeeChoices = employeeUpdate.map((employee) => {
     return {
       name: employee.id,
-      value: employee.id
+      value: employee.id,
     };
   });
-  const managerUpdate = await db.query("SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id");
+  const managerUpdate = await db.query(
+    "SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id"
+  );
   const managerChoices = managerUpdate.map((manager) => {
     return {
       name: manager.last_name,
-      value: manager.id
+      value: manager.id,
     };
   });
-  const roleUpdate = await db.query("SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id");
+  const roleUpdate = await db.query(
+    "SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id"
+  );
   const roleUpdateChoices = roleUpdate.map((role) => {
-    return{
+    return {
       name: role.title,
-      value: role.id
-    }
-  })
+      value: role.id,
+    };
+  });
   const employeeUpdateResponse = await inquirer
     .prompt([
       {
@@ -335,9 +340,9 @@ async function updateEmployee() {
       },
       {
         type: "list",
-        name:"title",
-        message:"Choose their role:",
-        choices: roleUpdateChoices
+        name: "role_id",
+        message: "Choose their role:",
+        choices: roleUpdateChoices,
       },
       {
         type: "list",
@@ -347,25 +352,24 @@ async function updateEmployee() {
       },
     ])
     .then(async function (data) {
-      let { role_id, manager_id } = data;
+      let { id, manager_id, role_id } = data;
       console.log(data);
       const employeeUpdateQuery = await db.query(
         "UPDATE employee SET ? WHERE ? ",
-       [ 
-         {
-          manager_id: data.manager_id
-        },
-        {
-          id: data.id
-        },
-        {
-         title: data.title
-        },
-    ]
+        [
+          {
+            id: data.id,
+          },
+          {
+            manager_id: data.manager_id,
+          },
+          {
+            role_id: data.role_id,
+          },
+        ]
       );
     });
   mainMenu();
 }
-
 
 

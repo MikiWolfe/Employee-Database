@@ -50,5 +50,5 @@ Link to a screenshot of the application: https://raw.githubusercontent.com/MikiW
 https://raw.githubusercontent.com/MikiWolfe/Employee-Database/main/Screenshot01.png
 
 ### Link to Video Walkthrough
-Link to video walkthrough of application: *LATER*
+Link to video walkthrough of application: https://watch.screencastify.com/v/TPqxlAywxEZyCMqcyeYG
 
