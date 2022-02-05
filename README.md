@@ -1,7 +1,7 @@
 # Employee Tracker
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Description: 
-This application helps view and manage the departments of your company. This is to help organize roles of employees of the company.  
+This application helps view and manage the departments, roles and employees of your company. 
 Repository name: Employee-Database. 
 
 ## Table of Contents:
@@ -15,7 +15,7 @@ Repository name: Employee-Database.
 ## Installation 
 ```npm i on package.json files```
 ## Usage
-Assisting a company manage and organize their employees, roles and departments.  Departments, roles and employees can be added and removed.  Each department, role and employee are issued their own ID.  Tables of departments, roles and employees can be displayed, with columns including salaries and job titles.  Employees can also be reassigned managers and roles in the database. 
+Assisting a company manage and organize their employees, roles and departments.  Departments, roles and employees can be added and removed.  Each department, role and employee are issued their own ID.  Tables of departments, roles and employees can be displayed, with columns including salaries and job titles.  Employees can also be reassigned managers and roles in the database. Updates in the future will allow users to display tables by budget so they can plan their financial future accordingly.  
 ## Licensing
 2023 Mikayla B. 
 Copyright Permission is hereby granted, free of charge, 
