@@ -301,7 +301,7 @@ async function removeEmployee() {
   mainMenu();
 }
 
-// Tried and failed to get this function to work 
+// Tried and failed to get this function to work
 async function updateEmployee() {
   const employeeUpdate = await db.query(
     "SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id"
@@ -370,6 +370,6 @@ async function updateEmployee() {
       );
     });
   mainMenu();
-}
+};
 
 
