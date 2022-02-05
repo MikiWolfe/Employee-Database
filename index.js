@@ -21,7 +21,7 @@ function mainMenu() {
           "Remove a department",
           "Remove a role",
           "Remove an employee",
-          "Update an employee's manager",
+          "Update an employee",
           "I would like to go home",
         ],
       },
@@ -65,8 +65,8 @@ function mainMenu() {
           removeEmployee();
           break;
 
-        case "Update an employee's manager":
-          updateEmployeeManager();
+        case "Update an employee":
+          updateEmployee();
           break;
 
         case "I would like to go home":
@@ -128,6 +128,7 @@ async function addRole() {
       value: department.id,
       name: department.name,
     };
+
   });
 
   const answersRole = await inquirer
@@ -302,22 +303,29 @@ async function removeEmployee() {
 }
 
 
-async function updateEmployeeManager() {
-  const employeeUpdate = await db.query("SELECT * FROM employee");
+async function updateEmployee() {
+  const employeeUpdate = await db.query("SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id");
   const employeeChoices = employeeUpdate.map((employee) => {
     return {
       name: employee.id,
-      value: employee.id,
+      value: employee.id
     };
   });
-  const managerUpdate = await db.query("SELECT * FROM employee");
+  const managerUpdate = await db.query("SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id");
   const managerChoices = managerUpdate.map((manager) => {
     return {
       name: manager.last_name,
-      value: manager.id,
+      value: manager.id
     };
   });
-  const employeeMangerResponse = await inquirer
+  const roleUpdate = await db.query("SELECT employee.*, role.title, role.salary FROM employee LEFT JOIN role ON employee.role_id = role.id");
+  const roleUpdateChoices = roleUpdate.map((role) => {
+    return{
+      name: role.title,
+      value: role.id
+    }
+  })
+  const employeeUpdateResponse = await inquirer
     .prompt([
       {
         type: "list",
@@ -327,23 +335,33 @@ async function updateEmployeeManager() {
       },
       {
         type: "list",
+        name:"title",
+        message:"Choose their role:",
+        choices: roleUpdateChoices
+      },
+      {
+        type: "list",
         message: "Select a new manager by last name:",
         name: "manager_id",
         choices: managerChoices,
       },
     ])
     .then(async function (data) {
-      let { manager_id } = data;
+      let { role_id, manager_id } = data;
       console.log(data);
       const employeeUpdateQuery = await db.query(
         "UPDATE employee SET ? WHERE ? ",
-       [
-        {
+       [ 
+         {
           manager_id: data.manager_id
         },
-      {
-        id: data.id
-      }]
+        {
+          id: data.id
+        },
+        {
+         title: data.title
+        },
+    ]
       );
     });
   mainMenu();

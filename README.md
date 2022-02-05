@@ -15,7 +15,7 @@ Repository name: Employee-Database.
 ## Installation 
 ```npm i on package.json files```
 ## Usage
-Assisting a company manage and organize their business 
+Assisting a company manage and organize their employees, roles and departments.  Departments, roles and employees can be added and removed.  Each department, role and employee are issued their own ID.  Tables of departments, roles and employees can be displayed, with columns including salaries and job titles.  Employees can also be reassigned managers and roles in the database. 
 ## Licensing
 2023 Mikayla B. 
 Copyright Permission is hereby granted, free of charge, 
@@ -42,7 +42,7 @@ None
 Please reach out if you have any questions about this application:
 GitHub profile: https://github.com/MikiWolfe
 
-Link to the repo: https://github.com/MikiWolfe/Employee-Tracker
+Link to the repo: https://github.com/MikiWolfe/Employee-Database
 
 ### Image of application
 Link to a screenshot of the application: *LATER*
