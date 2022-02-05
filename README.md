@@ -2,7 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Description: 
 This application helps view and manage the departments of your company. This is to help organize roles of employees of the company.  
-Repository name: Employee-Tracker
+Repository name: Employee-Database. 
 
 ## Table of Contents:
 * [Description](#description)

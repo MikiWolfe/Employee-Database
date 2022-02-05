@@ -18,11 +18,10 @@ function mainMenu() {
           "Add a department",
           "Add a role",
           "Add an employee",
-          "Update an employee's manager",
-          "Remove an employee",
           "Remove a department",
           "Remove a role",
-          "View employees by department",
+          "Remove an employee",
+          "Update an employee's manager",
           "I would like to go home",
         ],
       },
@@ -54,14 +53,6 @@ function mainMenu() {
           addEmployee();
           break;
 
-        case "Update an employee's manager":
-          updateEmployeeManager();
-          break;
-
-        case "Remove an employee":
-          removeEmployee();
-          break;
-
         case "Remove a department":
           removeDept();
           break;
@@ -70,8 +61,12 @@ function mainMenu() {
           removeRole();
           break;
 
-        case "View employees by department":
-          employeesAndDept();
+        case "Remove an employee":
+          removeEmployee();
+          break;
+
+        case "Update an employee's manager":
+          updateEmployeeManager();
           break;
 
         case "I would like to go home":
@@ -88,7 +83,6 @@ async function viewDepartments() {
 }
 
 async function viewRoles() {
-  // const role = await db.query("SELECT * FROM role")
   const role = await db.query(
     "SELECT role.*, department.name, department.id FROM role LEFT JOIN department ON role.department_id = department.id"
   );
@@ -203,7 +197,7 @@ async function addEmployee() {
       },
       {
         type: "list",
-        message: "Who is their manager:",
+        message: "Choose a manager by last name:",
         name: "manager_id",
         choices: addManager,
       },
@@ -215,110 +209,6 @@ async function addEmployee() {
         last_name: data.last_name,
         role_id: data.title,
         manager_id: data.manager_id,
-      });
-    });
-  mainMenu();
-}
-
-// updating an EMPOLYEE TODO: fix this:
-async function updateEmployeeManager() {
-  const employeeUpdate = await db.query("SELECT * FROM employee");
-  const employeeChoices = employeeUpdate.map((employee) => {
-    return {
-      name: employee.id,
-      value: employee.id,
-    };
-  });
-  const managerUpdate = await db.query("SELECT * FROM employee");
-  const managerChoices = managerUpdate.map((manager) => {
-    return {
-      name: manager.last_name,
-      value: manager.id,
-    };
-  });
-  const employeeMangerResponse = await inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "id",
-        message: "Choose an employee by ID:",
-        choices: employeeChoices,
-      },
-      {
-        type: "list",
-        message: "Select a new manager by last name:",
-        name: "manager_id",
-        choices: managerChoices,
-      },
-    ])
-    .then(async function (data) {
-      console.log(data);
-      let {manager_id } = data;
-      const employeeUpdateQuery = await db.query(
-        "UPDATE employee SET WHERE ?",
-        {
-         
-          manager_id: data.manager_id
-        }
-      );
-    });
-  mainMenu();
-}
-
-async function removeEmployee() {
-  const employeeDelete = await db.query("SELECT * FROM employee");
-  const employeeDeleteChoices = employeeDelete.map((employee) => {
-    return {
-      name: employee.id,
-      value: employee.id,
-    };
-  });
-  const deleteEmployee = await inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "id",
-        message: "Choose an employee by ID that you would like to remove:",
-        choices: employeeDeleteChoices,
-      },
-    ])
-    .then(async function (data) {
-      console.log(data);
-      let { id } = data;
-      const employeeDeleteQuery = await db.query(
-        "DELETE FROM employee WHERE ?",
-        {
-          id: data.id,
-        }
-      );
-    });
-  mainMenu();
-}
-
-async function removeRole() {
-  const roleDelete = await db.query(
-    "SELECT * FROM role"
-  );
-  const roleDeleteChoices = roleDelete.map((role) => {
-    return {
-      name: role.title,
-      value: role.id,
-    };
-  });
-  const deleteRole = await inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "id",
-        message: "Choose a role to remove:",
-        choices: roleDeleteChoices,
-      },
-    ])
-    .then(async function (data) {
-      console.log(data);
-      let { id } = data;
-      const roleDeleteQuery = await db.query("DELETE FROM role WHERE ?", {
-        id: data.id,
       });
     });
   mainMenu();
@@ -354,15 +244,110 @@ async function removeDept() {
   mainMenu();
 }
 
-async function employeesAndDept(){
+async function removeRole() {
+  const roleDelete = await db.query("SELECT * FROM role");
+  const roleDeleteChoices = roleDelete.map((role) => {
+    return {
+      name: role.title,
+      value: role.id,
+    };
+  });
+  const deleteRole = await inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "id",
+        message: "Choose a role to remove:",
+        choices: roleDeleteChoices,
+      },
+    ])
+    .then(async function (data) {
+      console.log(data);
+      let { id } = data;
+      const roleDeleteQuery = await db.query("DELETE FROM role WHERE ?", {
+        id: data.id,
+      });
+    });
+  mainMenu();
+}
+
+async function removeEmployee() {
+  const employeeDelete = await db.query("SELECT * FROM employee");
+  const employeeDeleteChoices = employeeDelete.map((employee) => {
+    return {
+      name: employee.id,
+      value: employee.id,
+    };
+  });
+  const deleteEmployee = await inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "id",
+        message: "Choose an employee by ID that you would like to remove:",
+        choices: employeeDeleteChoices,
+      },
+    ])
+    .then(async function (data) {
+      console.log(data);
+      let { id } = data;
+      const employeeDeleteQuery = await db.query(
+        "DELETE FROM employee WHERE ?",
+        {
+          id: data.id,
+        }
+      );
+    });
+  mainMenu();
+}
 
 
-
-  mainMenu()
+async function updateEmployeeManager() {
+  const employeeUpdate = await db.query("SELECT * FROM employee");
+  const employeeChoices = employeeUpdate.map((employee) => {
+    return {
+      name: employee.id,
+      value: employee.id,
+    };
+  });
+  const managerUpdate = await db.query("SELECT * FROM employee");
+  const managerChoices = managerUpdate.map((manager) => {
+    return {
+      name: manager.last_name,
+      value: manager.id,
+    };
+  });
+  const employeeMangerResponse = await inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "id",
+        message: "Choose an employee by ID:",
+        choices: employeeChoices,
+      },
+      {
+        type: "list",
+        message: "Select a new manager by last name:",
+        name: "manager_id",
+        choices: managerChoices,
+      },
+    ])
+    .then(async function (data) {
+      let { manager_id } = data;
+      console.log(data);
+      const employeeUpdateQuery = await db.query(
+        "UPDATE employee SET ? WHERE ? ",
+       [
+        {
+          manager_id: data.manager_id
+        },
+      {
+        id: data.id
+      }]
+      );
+    });
+  mainMenu();
 }
 
 
 
-
-
-// 'SELECT title FROM role' to select all employees by role
